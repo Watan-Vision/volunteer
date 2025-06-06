@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطوع مع مبادرة اعرف بلدك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        html[lang="ar"] {
+            direction: rtl;
+        }
+
+        html[lang="en"] {
+            direction: ltr;
+        }
+
+        /* Light Mode */
+        body.light-mode {
+            background: linear-gradient(135deg, #F5E6CC 0%, #FFF8E7 100%);
+            color: #4A3728;
+        }
+
+        body.light-mode .header, body.light-mode footer, body.light-mode .content-section {
+            background-color: #FFF8E7;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .dropdown-content {
+            background-color: #FFF8E7;
+        }
+
+        body.light-mode .dropdown-content a {
+            color: #4A3728;
+        }
+
+        body.light-mode .welcome-section h1, body.light-mode .content-section h2 {
+            color: #4A3728;
+        }
+
+        body.light-mode .welcome-section p {
+            color: #4682B4;
+        }
+
+        body.light-mode .cta-btn, body.light-mode .back-btn {
+            background: linear-gradient(45deg, #D4AF37, #E8C872);
+            color: #4A3728;
+        }
+
+        body.light-mode .header-title-circle {
+            background: linear-gradient(45deg, #D4AF37, #E8C872);
+        }
+
+        body.light-mode .header-title {
+            color: #4A3728;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1A2526 0%, #2F3B3C 100%);
+            color: #F5F5DC;
+        }
+
+        body.dark-mode .header, body.dark-mode footer, body.dark-mode .content-section {
+            background-color: #2F3B3C;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .dropdown-content {
+            background-color: #2F3B3C;
+        }
+
+        body.dark-mode .dropdown-content a {
+            color: #F5F5DC;
+        }
+
+        body.dark-mode .welcome-section h1, body.dark-mode .content-section h2 {
+            color: #F5F5DC;
+        }
+
+        body.dark-mode .welcome-section p {
+            color: #87CEEB;
+        }
+
+        body.dark-mode .cta-btn, body.dark-mode .back-btn {
+            background: linear-gradient(45deg, #E8C872, #FFD700);
+            color: #1A2526;
+        }
+
+        body.dark-mode .header-title-circle {
+            background: linear-gradient(45deg, #E8C872, #FFD700);
+        }
+
+        body.dark-mode .header-title {
+            color: #F5F5DC;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-title-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .header-title-circle:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-title {
+            transition: all 0.3s ease;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header-title:hover {
+            box-shadow: 0 0 20px rgba(232, 200, 114, 0.7);
+            background-color: rgba(232, 200, 114, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+            50% { transform: translateY(-10px); box-shadow: 0 0 30px rgba(255, 215, 0, 0.9); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Settings Dropdown */
+        .settings-container {
+            position: relative;
+        }
+
+        .settings {
+            cursor: pointer;
+            font-size: 2rem;
+            padding: 10px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .settings:hover {
+            transform: rotate(90deg);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border-radius: 5px;
+            top: 100%;
+            margin-top: 5px;
+            animation: dropDown 0.3s ease-out;
+        }
+
+        @keyframes dropDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        html[lang="ar"] .dropdown-content {
+            left: 0;
+            right: auto;
+        }
+
+        html[lang="en"] .dropdown-content {
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown-content a {
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        html[lang="ar"] .dropdown-content a {
+            text-align: right;
+        }
+
+        html[lang="en"] .dropdown-content a {
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background: linear-gradient(45deg, #D4AF37, #E8C872);
+            color: #4A3728;
+        }
+
+        .dark-mode .dropdown-content a:hover {
+            background: linear-gradient(45deg, #E8C872, #FFD700);
+            color: #1A2526;
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown-content:hover {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .welcome-section h1 {
+            font-size: 3rem;
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        .welcome-section p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .cta-btn, .back-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn:hover, .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 115, 0, 6);
+        }
+
+        .modern-light {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent 70%);
+            filter: blur(50px);
+            animation: modernLightMove 15s infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes modernLightMove {
+            to { transform: translate(50%, 50%) rotate(180deg); }
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin: 40px 0;
+            padding: 2px;
+            border-radius: 12px;
+            animation: slideUp 0.8s ease-out;
+            text-align: center;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #E8C872;
+            position: relative;
+            display: inline-block;
+        }
+
+        .content-section h2::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: #E8C872;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .content-section h2:hover::after {
+            width: 120px;
+        }
+
+        .content-section p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* Form Section */
+        .form-section iframe {
+            width: 100%;
+            max-width: 640px;
+            height: 960px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: block;
+            margin: 20px auto;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: auto;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+            }
+
+            .welcome-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .welcome-section p {
+                font-size: 1.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 2rem;
+            }
+
+            .content-section p {
+                font-size: 1.1rem;
+            }
+
+            .header-title-circle {
+                width: 60px;
+                height: 60px;
+            }
+
+            .header-title h3{
+                font-size: 1.2rem;
+            }
+
+            .cta-btn, .back-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+
+            .form-section iframe {
+                width: 100%;
+                height: 800px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .welcome-section p {
+                font-size: 1rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .content-section p {
+                font-size: 1rem;
+            }
+
+            .header-title h3 {
+                font-size: 1rem;
+            }
+
+            .cta-btn, .back-btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+
+            .form-section iframe {
+                height: 700px;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="header-title-circle">
+                <img src="logo.jpg" alt="تطوع مع مبادرة اعرف بلدك">
+            </div>
+            <div class="header-title">
+                <h3><span class="ar-content">تطوع مع مبادرة اعرف بلدك</span><span class="en-content">Volunteer with Know Your Country</span></h3>
+            </div>
+        </div>
+        <div class="settings-container">
+            <div class="dropdown">
+                <div class="settings">
+                    <span>⚙️</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="#" onclick="toggleDarkMode(event)"> <span class="ar-content">الوضع الفاتح</span><span class="en-content">Light Mode</span></a>
+                    <a href="#" onclick="toggleLanguage(event)"> <span class="ar-content">الإنجليزية</span><span class="en-content">Arabic</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="modern-light"></div>
+            <h1 class="ar-content">💡 انضم إلينا كمتطوع!</h1>
+            <h1 class="en-content">💡 Join Us as a Volunteer!</h1>
+            <p class="ar-content">كن جزءًا من مبادرة "اعرف بلدك" وساهم في بناء وعي وطني لجيل جديد. التطوع معنا هو فرصة لتطوير مهاراتك، اكتساب خبرات جديدة، وترك أثر إيجابي في مجتمعك.</p>
+            <p class="en-content">Be a part of the "Know Your Country" initiative and contribute to building a national awareness for a new generation. Volunteering with us is a chance to develop your skills, gain new experiences, and make a positive impact in your community.</p>
+            <div class="button-container">
+                <a href="https://e3rafbaladak.com/" class="back-btn"><span class="ar-content">العودة للصفحة الرئيسية</span><span class="en-content">Back to Homepage</span></a>
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section class="content-section form-section">
+            <h2 class="ar-content">📝 سجل الآن كمتطوع</h2>
+            <h2 class="en-content">📝 Register Now as a Volunteer</h2>
+            <p class="ar-content">املأ النموذج التالي لتصبح جزءًا من فريق المتطوعين. تأكد من تقديم معلومات دقيقة لتتمكن من الانضمام بسلاسة.</p>
+            <p class="en-content">Fill out the following following section to become a part of the volunteer team. Ensure you provide accurate information to join smoothly.</p>
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSfsTn8hBzqS8Xoq43U7b7K_vqCtm4AvDMCx3PioVHPaap7FMQ/viewform?embedded=true"
+                width="640"
+                height="960"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0"
+                title="Volunteer Registration Form"
+                >جارٍ التحميل…</iframe>
+        </section>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <p class="ar-content">© 2025 مبادرة "اعرف بلدك" - فريق "رؤية وطن" - مدرسة الشهيد مدحت طلعت الرسمية للغات</p>
+        <p class="en-content">© 2025 "Know Your Country" Initiative - "National Vision" Team - Martyr Medhat Talaat Official Language School</p>
+    </footer>
+
+    <script>
+        const translations = {
+            ar: {
+                pageTitle: "تطوع مع مبادرة اعرف بلدك",
+                logoAlt: "تطوع مع مبادرة اعرف بلدك",
+                toggleModeDark: "الوضع الداكن",
+                toggleModeLight: "الوضع الفاتح",
+                toggleLangEn: "الإنجليزية",
+                toggleLangAr: "العربية"
+            },
+            en: {
+                pageTitle: "Volunteer with Know Your Country Initiative",
+                logoAlt: "Volunteer with Know Your Country Initiative",
+                toggleModeDark: "Dark Mode",
+                toggleModeLight: "Light Mode",
+                toggleLangEn: "English",
+                toggleLangAr: "Arabic"
+            }
+        };
+
+        function toggleDarkMode(event) {
+            event.preventDefault();
+            const body = document.body;
+            const modeLink = document.querySelector('.dropdown-content a[onclick^="toggleDarkMode"]');
+            const currentLang = document.documentElement.lang;
+
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+
+            modeLink.querySelector('.ar-content').textContent = body.classList.contains('dark-mode') ? translations.ar.toggleModeLight : translations.ar.toggleModeDark;
+            modeLink.querySelector('.en-content').textContent = body.classList.contains('dark-mode') ? translations.en.toggleModeLight : translations.en.toggleModeDark;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const htmlEl = document.documentElement;
+            const currentLang = htmlEl.lang;
+            const newLang = currentLang === 'ar' ? 'en' : 'ar';
+
+            htmlEl.lang = newLang;
+            htmlEl.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('.ar-content').forEach(el => {
+                el.style.display = newLang === 'ar' ? 'block' : 'none';
+            });
+            document.querySelectorAll('.en-content').forEach(el => {
+                el.style.display = newLang === 'en' ? 'block' : 'none';
+            });
+
+            const trans = translations[newLang];
+            document.title = trans.pageTitle;
+            document.querySelector('.header-title-circle img').alt = trans.logoAlt;
+            const modeLink = document.querySelector('.dropdown-content a[onclick^="toggleDarkMode"]');
+            modeLink.querySelector('.ar-content').textContent = document.body.classList.contains('dark-mode') ? translations.ar.toggleModeLight : translations.ar.toggleModeDark;
+            modeLink.querySelector('.en-content').textContent = document.body.classList.contains('dark-mode') ? translations.en.toggleModeLight : translations.en.toggleModeDark;
+            const langLink = document.querySelector('.dropdown-content a[onclick^="toggleLanguage"]');
+            langLink.querySelector('.ar-content').textContent = translations.ar.toggleLangEn;
+            langLink.querySelector('.en-content').textContent = translations.en.toggleLangAr;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialLang = document.documentElement.lang || 'ar';
+            document.documentElement.lang = initialLang;
+            document.documentElement.dir = initialLang === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('.ar-content').forEach(el => {
+                el.style.display = initialLang === 'ar' ? 'block' : 'none';
+            });
+            document.querySelectorAll('.en-content').forEach(el => {
+                el.style.display = initialLang === 'en' ? 'block' : 'none';
+            });
+
+            const trans = translations[initialLang];
+            document.title = trans.pageTitle;
+            document.querySelector('.header-title-circle img').alt = trans.logoAlt;
+            const modeLink = document.querySelector('.dropdown-content a[onclick^="toggleDarkMode"]');
+            modeLink.querySelector('.ar-content').textContent = document.body.classList.contains('dark-mode') ? translations.ar.toggleModeLight : translations.ar.toggleModeDark;
+            modeLink.querySelector('.en-content').textContent = document.body.classList.contains('dark-mode') ? translations.en.toggleModeLight : translations.en.toggleModeDark;
+            const langLink = document.querySelector('.dropdown-content a[onclick^="toggleLanguage"]');
+            langLink.querySelector('.ar-content').textContent = translations.ar.toggleLangEn;
+            langLink.querySelector('.en-content').textContent = translations.en.toggleLangAr;
+        });
+    </script>
+</body>
+</html>
